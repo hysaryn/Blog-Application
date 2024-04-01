@@ -35,5 +35,4 @@ public class Post {
   @Column(name = "content", nullable = false)
   private String content;
 
-
 }
