@@ -1,4 +1,4 @@
-package com.springboot.blog.utils;
+package com.springboot.blog.security;
 
 import com.springboot.blog.exception.BlogAPIException;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -17,10 +17,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtTokenProvider {
-  @Value("${app.jwt-secret")
+  @Value("${app.jwt-secret}")
   private String jwtSecret;
 
-  @Value("app.jwt-expiration-milliseconds")
+  @Value("${app-jwt-expiration-milliseconds}")
   private long jwtExpirationDate;
 
   //generate JWT token

@@ -1,6 +1,5 @@
 package com.springboot.blog.security;
 
-import com.springboot.blog.utils.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
