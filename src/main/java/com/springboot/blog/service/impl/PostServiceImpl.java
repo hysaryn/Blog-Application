@@ -1,9 +1,11 @@
 package com.springboot.blog.service.impl;
 
+import com.springboot.blog.entity.Category;
 import com.springboot.blog.entity.Post;
 import com.springboot.blog.exception.ResourceNotFoundException;
 import com.springboot.blog.payload.PostDto;
 import com.springboot.blog.payload.PostResponse;
+import com.springboot.blog.repository.CategoryRepository;
 import com.springboot.blog.repository.PostRepository;
 import com.springboot.blog.service.PostService;
 import java.util.List;
@@ -21,16 +23,21 @@ public class PostServiceImpl implements PostService {
 
   private PostRepository postRepository;
   private ModelMapper mapper;
+  private CategoryRepository categoryRepository;
 
-  public PostServiceImpl(PostRepository postRepository, ModelMapper mapper) {
+  public PostServiceImpl(PostRepository postRepository, ModelMapper mapper, CategoryRepository categoryRepository) {
     this.postRepository = postRepository;
     this.mapper = mapper;
+    this.categoryRepository = categoryRepository;
   }
 
   @Override
   public PostDto createPost(PostDto postDto) {
+    Category category = categoryRepository.findById(postDto.getCategoryId())
+        .orElseThrow(() -> new ResourceNotFoundException("category", "id", postDto.getCategoryId()));
     // convert DTO to entity
     Post post = mapToEntity(postDto);
+    post.setCategory(category);
     Post newPost = postRepository.save(post);
 
     //convert entity to DTO
@@ -73,9 +80,13 @@ public class PostServiceImpl implements PostService {
   public PostDto updatePostById(PostDto postDto, long id) {
     //get post by id from the database
     Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
+    Category category = categoryRepository.findById(postDto.getCategoryId())
+            .orElseThrow(() -> new ResourceNotFoundException("category", "id", postDto.getCategoryId()));
+
     post.setTitle(postDto.getTitle());
     post.setDescription(postDto.getDescription());
     post.setContent(postDto.getContent());
+    post.setCategory(category);
 
     Post updatedPost = postRepository.save(post);
     return mapToDTO(updatedPost);
