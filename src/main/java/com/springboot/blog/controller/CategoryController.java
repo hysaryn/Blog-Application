@@ -2,6 +2,7 @@ package com.springboot.blog.controller;
 
 import com.springboot.blog.payload.CategoryDto;
 import com.springboot.blog.service.CategoryService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import java.util.List;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,9 @@ public class CategoryController {
   }
 
 
+  @SecurityRequirement(
+      name = "Bearer Authentication"
+  )
   @PostMapping
   @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<CategoryDto> addCategory(@RequestBody CategoryDto categoryDto) {
@@ -44,6 +48,9 @@ public class CategoryController {
     return ResponseEntity.ok(categoryService.getAllCategories());
   }
 
+  @SecurityRequirement(
+      name = "Bearer Authentication"
+  )
   @PutMapping("{id}")
   @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<CategoryDto> updateCategory(@RequestBody CategoryDto categoryDto,
@@ -51,6 +58,9 @@ public class CategoryController {
     return ResponseEntity.ok(categoryService.updateCategory(categoryDto, categoryId));
   }
 
+  @SecurityRequirement(
+      name = "Bearer Authentication"
+  )
   @DeleteMapping("{id}")
   @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<String> deleteCategory(@PathVariable("id") long categoryId) {
